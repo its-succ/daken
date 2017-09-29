@@ -21,5 +21,6 @@ public class Main implements SparkApplication {
 	@WebFilter(filterName = "SparkInitFilter", urlPatterns = { "/*" }, initParams = {
 			@WebInitParam(name = "applicationClass", value = "jp.co.esm.its.daken.Main") })
 	public static class SparkInitFilter extends spark.servlet.SparkFilter {
+		Dummy dummy = new Dummy(1);
 	}
 }
