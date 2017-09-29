@@ -24,6 +24,7 @@ target/
 
 # Gradle
 .gradle
+!gradle-wrapper.jar
 
 # IntelliJ project files
 *.iml
