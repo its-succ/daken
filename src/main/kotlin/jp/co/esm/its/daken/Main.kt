@@ -10,6 +10,7 @@ import spark.servlet.SparkApplication
 class Main : SparkApplication {
 
   override fun init() {
+    staticFiles.location("/public") // Static Files
     get("/hello") { req, res -> "Hello World" }
   }
 
