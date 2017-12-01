@@ -20,6 +20,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/google-signin/google-signin.html">
+<link rel="import" href="../bower_components/google-signin/google-signin-aware.html">
 <link rel="import" href="my-icons.html">
 
 <link rel="lazy-import" href="my-view1.html">
@@ -28,7 +30,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="lazy-import" href="my-view404.html">
 
 <dom-module id="my-app">
-  <template>
+  <template is="dom-bind">
     <style>
       :host {
         --app-primary-color: #4285f4;
@@ -68,6 +70,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       }
     </style>
 
+    <google-signin-aware scopes="https://www.googleapis.com/auth/drive"
+                         initialized="{{initialized}}"
+                         signed-in="{{signedIn}}"
+                         on-google-signin-aware-success="handleSignin"
+                         on-google-signin-offline-success="handleOffline"></google-signin-aware>
+
     <app-location
         route="{{route}}"
         url-space-regex="^[[rootPath]]">
@@ -98,6 +106,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title>My App</div>
+            <p>{{signedIn}}</p>
+            <google-signin brand="google" height="standard" client-id="540365958224-56l4hvkelp2io69musd50fnkp1lj7tvu.apps.googleusercontent.com"></google-signin>
           </app-toolbar>
         </app-header>
 
@@ -116,6 +126,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
 
   <script>
+    var aware = document.querySelector('my-app');
+        if (!Polymer.Element) {
+      aware = aware.querySelector('template');
+    }
+  aware.handleSignin = function(response) {
+    var user = gapi.auth2.getAuthInstance()['currentUser'].get();
+    console.log('User name: ' + user.getBasicProfile().getName());
+  };
+  aware.handleOffline = function(response) {
+    console.log('Offline code received: ' + response.detail.code);
+    // Here you would POST response.detail.code to your webserver, which can
+    // exchange the authorization code for an access token. More info at:
+    // https://developers.google.com/identity/protocols/OAuth2WebServer
+  };
     class MyApp extends Polymer.Element {
       static get is() { return 'my-app'; }
 
