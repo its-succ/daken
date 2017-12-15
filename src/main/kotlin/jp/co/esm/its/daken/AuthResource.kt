@@ -34,20 +34,19 @@ class AuthResource {
         post("/auth", createVerifyTokenHandler())
     }
 
-    private fun createVerifyTokenHandler(): Route {
-        return Route({req, res ->
-            val idTokenString = req.queryParams("idToken")
-            val idToken: GoogleIdToken? = verifier.verify(idTokenString)
-            if (idToken == null) {
+    private fun createVerifyTokenHandler() = Route({req, res ->
+        val idTokenString = req.queryParams("idToken")
+        val idToken: GoogleIdToken? = verifier.verify(idTokenString)
+        if (idToken == null) {
+            res.status(400)
+        } else {
+            val domain = idToken.payload.hostedDomain
+            if ("esm.co.jp" != (domain)) {
                 res.status(400)
             } else {
-                val domain = idToken.payload.hostedDomain
-                if ("esm.co.jp" != (domain)) {
-                    res.status(400)
-                } else {
-                    res.status()
-                }
+                res.status()
             }
-        })
-    }
+        }
+    })
+
 }
