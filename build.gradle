@@ -52,6 +52,8 @@ dependencies {
     // 'test.useTestNG()' to your build script.
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile 'com.google.cloud:google-cloud-datastore:1.14.0'
+    compile group: 'com.googlecode.objectify', name: 'objectify', version: '5.0.3'
 }
 compileKotlin {
     kotlinOptions {
