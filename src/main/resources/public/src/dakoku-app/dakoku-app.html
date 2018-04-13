@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/google-signin/google-signin.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/google-signin/google-signin-aware.html">
 
 <dom-module id="dakoku-app">
@@ -15,21 +16,18 @@
                          on-google-signin-aware-success="handleSignin"
                          on-google-signin-offline-success="handleOffline"></google-signin-aware>
     <h2>Hello [[prop1]]!</h2>
-    <google-signin brand="google" height="standard" client-id="540365958224-56l4hvkelp2io69musd50fnkp1lj7tvu.apps.googleusercontent.com"></google-signin>
+    <google-signin brand="google" height="standard" client-id="512704348312-hhq0htjk798tahele7tf32n2ckc4supa.apps.googleusercontent.com"></google-signin>
+
+    <iron-ajax id="ajax"
+                method="POST"
+                url="/auth"
+                content-type="application/x-www-form-urlencoded"
+                body="[[tokenObject]]"
+                on-response="handleAuthSuccess"
+                on-error="handleAuthError"></iron-ajax>
   </template>
 
   <script>
-    const aware = document.querySelector('dakoku-app');
-    if (!Polymer.Element) {
-      aware = aware.querySelector('template');
-    }
-    aware.handleSignin = (response) => {
-      const user = gapi.auth2.getAuthInstance()['currentUser'].get();
-      console.log('User name: ' + user.getBasicProfile().getName());
-    };
-    aware.handleOffline = (response) => {
-      console.log('Offline code received: ' + response.detail.code);
-    };
     /**
      * @customElement
      * @polymer
@@ -41,8 +39,34 @@
           prop1: {
             type: String,
             value: 'dakoku-app'
+          },
+          tokenObject: {
+            type: Object,
+            computed: 'computeTokenObject(idToken)'
           }
         };
+      }
+
+      handleSignin(response) {
+        const user = gapi.auth2.getAuthInstance()['currentUser'].get();
+        this.idToken = user.getAuthResponse().id_token;
+        this.$.ajax.generateRequest();
+      }
+
+      handleOffline(response) {
+        console.log('Offline code received: ' + response.detail.code);
+      }
+
+      handleAuthSuccess() {
+        console.log(arguments)
+      }
+
+      handleAuthError() {
+        console.log(arguments)
+      }
+
+      computeTokenObject(idToken) {
+        return {idToken};
       }
     }
 
