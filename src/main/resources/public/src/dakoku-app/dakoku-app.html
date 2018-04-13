@@ -1,4 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/google-signin/google-signin.html">
+<link rel="import" href="../../bower_components/google-signin/google-signin-aware.html">
 
 <dom-module id="dakoku-app">
   <template>
@@ -7,10 +9,27 @@
         display: block;
       }
     </style>
+    <google-signin-aware scopes="profile"
+                         initialized="{{initialized}}"
+                         signed-in="{{signedIn}}"
+                         on-google-signin-aware-success="handleSignin"
+                         on-google-signin-offline-success="handleOffline"></google-signin-aware>
     <h2>Hello [[prop1]]!</h2>
+    <google-signin brand="google" height="standard" client-id="540365958224-56l4hvkelp2io69musd50fnkp1lj7tvu.apps.googleusercontent.com"></google-signin>
   </template>
 
   <script>
+    const aware = document.querySelector('dakoku-app');
+    if (!Polymer.Element) {
+      aware = aware.querySelector('template');
+    }
+    aware.handleSignin = (response) => {
+      const user = gapi.auth2.getAuthInstance()['currentUser'].get();
+      console.log('User name: ' + user.getBasicProfile().getName());
+    };
+    aware.handleOffline = (response) => {
+      console.log('Offline code received: ' + response.detail.code);
+    };
     /**
      * @customElement
      * @polymer
