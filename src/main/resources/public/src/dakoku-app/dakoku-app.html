@@ -10,12 +10,15 @@
         display: block;
       }
     </style>
-    <google-signin-aware scopes="profile"
+    <google-signin-aware id="signInAware"
+                         scopes="profile"
+                         hosted-domain="esm.co.jp"
+                         is-authorized="{{isAuthorized}}"
                          initialized="{{initialized}}"
                          signed-in="{{signedIn}}"
                          on-google-signin-aware-success="handleSignin"
                          on-google-signin-offline-success="handleOffline"></google-signin-aware>
-    <h2>Hello [[prop1]]!</h2>
+
     <google-signin brand="google" height="standard" client-id="512704348312-hhq0htjk798tahele7tf32n2ckc4supa.apps.googleusercontent.com"></google-signin>
 
     <iron-ajax id="ajax"
@@ -25,6 +28,11 @@
                 body="[[tokenObject]]"
                 on-response="handleAuthSuccess"
                 on-error="handleAuthError"></iron-ajax>
+
+    <template is="dom-if" if="{{isAuthorized}}">
+      <h2>Hello [[email]]!</h2>
+    </template>
+
   </template>
 
   <script>
@@ -36,7 +44,7 @@
       static get is() { return 'dakoku-app'; }
       static get properties() {
         return {
-          prop1: {
+          email: {
             type: String,
             value: 'dakoku-app'
           },
@@ -49,6 +57,8 @@
 
       handleSignin(response) {
         const user = gapi.auth2.getAuthInstance()['currentUser'].get();
+        const basicProfile = user.getBasicProfile();
+        this.email = basicProfile.getEmail();
         this.idToken = user.getAuthResponse().id_token;
         this.$.ajax.generateRequest();
       }
