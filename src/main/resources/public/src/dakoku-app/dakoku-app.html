@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/google-signin/google-signin.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/google-signin/google-signin-aware.html">
+<link rel="import" href="./dakoku-register.html">
 
 <dom-module id="dakoku-app">
   <template>
@@ -30,7 +31,8 @@
                 on-error="handleAuthError"></iron-ajax>
 
     <template is="dom-if" if="{{isAuthorized}}">
-      <h2>Hello [[email]]!</h2>
+      <h2>打刻アプリにようこそ [[email]]!</h2>
+      <dakoku-register></dakoku-register>
     </template>
 
   </template>
