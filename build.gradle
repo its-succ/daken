@@ -62,10 +62,12 @@ dependencies {
     compile 'org.springframework.boot:spring-boot-starter-web'
     compile 'org.springframework.boot:spring-boot-starter-webflux'
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
+    runtime "org.jetbrains.kotlin:kotlin-reflect"
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     testCompile 'io.projectreactor:reactor-test'
     compile 'com.google.cloud:google-cloud-datastore:1.14.0'
     compile 'com.googlecode.objectify:objectify:5.0.3'
+    compile 'com.google.cloud:google-cloud-pubsub:0.45.0-beta'
 }
 compileKotlin {
     kotlinOptions {
