@@ -1,12 +1,9 @@
 package jp.co.esm.its.daken
 
-import com.google.appengine.repackaged.com.google.api.client.extensions.appengine.http.UrlFetchTransport
-import com.google.appengine.repackaged.com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
-import com.google.appengine.repackaged.com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.appengine.repackaged.com.google.api.client.json.jackson2.JacksonFactory
-import spark.Redirect
-import spark.Request
-import spark.Response
+import com.google.api.client.extensions.appengine.http.UrlFetchTransport
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
+import com.google.api.client.json.jackson2.JacksonFactory
 import spark.Route
 import java.util.*
 import spark.Spark.*

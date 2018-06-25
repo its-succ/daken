@@ -1,24 +1,26 @@
 package jp.co.esm.its.daken
 
-import com.google.appengine.repackaged.com.google.api.client.extensions.appengine.http.UrlFetchTransport
-import com.google.appengine.repackaged.com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier
-import com.google.appengine.repackaged.com.google.api.client.http.HttpTransport
-import com.google.appengine.repackaged.com.google.api.client.json.JsonFactory
-import com.google.appengine.repackaged.com.google.api.client.json.jackson2.JacksonFactory
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
+import spark.Request
 import spark.Spark.*
 
 import javax.servlet.annotation.WebFilter
 import javax.servlet.annotation.WebInitParam
 
 import spark.servlet.SparkApplication
+import java.nio.charset.Charset
 import java.util.*
-import javax.servlet.http.HttpServletRequest
+
 
 class Main : SparkApplication {
 
+  var publishedMessage :String =""
+
   override fun init() {
     staticFiles.location("/public") // Static Files
-    get("/hello") { req, res -> "Hello World" }
+    get("/hello") { req, res -> "Hello World!! message:" + publishedMessage  }
+    post("/_ah/push-handlers/receivePublish") { req, res -> receivePublish(req) }
     AuthResource()
   }
 
@@ -27,6 +29,21 @@ class Main : SparkApplication {
       initParams = [WebInitParam(name = "applicationClass", value = "jp.co.esm.its.daken.Main")])
   class SparkInitFilter : spark.servlet.SparkFilter() {
     internal var dummy = Dummy(1)
+  }
+
+  // Deal with publish(put request) from PubSub:
+  private fun receivePublish(req:Request) : String{
+
+    // Parse the JSON message to the POJO model class.
+    val mapper = ObjectMapper().registerModule(KotlinModule())
+    val node = mapper.readTree(req.body())
+    // get data from pubsubMessage(JSON)
+    val messageId = node.get("message").get("messageId").asText()
+    val dataStringBase64 = node.get("message").get("data").asText()
+    // Decode Base64 and Encode UTF-8
+    val dataStringUTF8 = String(Base64.getDecoder().decode(dataStringBase64), Charset.forName("UTF-8"))
+    publishedMessage += String.format("ID:%s, Data:%s ／",messageId,dataStringUTF8)
+    return "ok. message published."
   }
 
   companion object {
