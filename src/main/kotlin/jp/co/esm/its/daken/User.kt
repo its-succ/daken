@@ -5,7 +5,7 @@ import com.google.appengine.api.datastore.Entity
 /**
  * ユーザーのデータクラス
  */
-data class User(var id: Long, var mailAddress: String, var nfcCode: String, var password: String) {
+data class User(var id: Long, var mail: String, var nfcCode: String, var password: String) {
 
     /**
      * モデルの内容を指定のエンティティに設定します。
@@ -13,7 +13,7 @@ data class User(var id: Long, var mailAddress: String, var nfcCode: String, var 
      */
     fun convert(entity: Entity) {
         entity.setProperty(ID, id)
-        entity.setProperty(MAIL_ADDRESS, mailAddress)
+        entity.setProperty(MAIL, mail)
         entity.setProperty(NFC_CODE, nfcCode)
         entity.setProperty(PASSWORD, password)
     }
@@ -27,7 +27,7 @@ data class User(var id: Long, var mailAddress: String, var nfcCode: String, var 
         // プロパティ名：label
         const val NFC_CODE = "nfcCode"
         // プロパティ名：value
-        const val MAIL_ADDRESS = "mailAddress"
+        const val MAIL = "mail"
         // プロパティ名：price
         const val PASSWORD = "password"
     }

@@ -40,7 +40,7 @@ class UserRepository {
 
     private fun entityToModel(entity: Entity): User = User(
             id = entity.key.id,
-            mailAddress = entity.getProperty(User.MAIL_ADDRESS) as String,
+            mail = entity.getProperty(User.MAIL) as String,
             nfcCode = entity.getProperty(User.NFC_CODE) as String,
             password = entity.getProperty(User.PASSWORD) as String
     )
