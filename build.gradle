@@ -40,6 +40,9 @@ repositories {
     // You can declare any Maven/Ivy/file repository here.
     jcenter()
     mavenCentral()
+    maven {
+        url 'http://dl.bintray.com/tkob/maven'
+    }
 }
 
 // In this section you declare the dependencies for your production and test code
@@ -64,6 +67,7 @@ dependencies {
     compile 'com.fasterxml.jackson.module:jackson-module-kotlin'
     testCompile 'org.springframework.boot:spring-boot-starter-test'
     compile 'com.google.cloud:google-cloud-datastore:1.14.0'
+    compile 'yokohama.unit:spring-data-gclouddatastore:0.3.1'
     testCompile  'com.google.appengine:appengine-api-stubs:+'
     testCompile  'com.google.appengine:appengine-testing:+'
 }
