@@ -1,4 +1,4 @@
-# daken
+# dakoku
 
 ## 事前条件
 
@@ -17,3 +17,7 @@
 ./gradlew appengineRun
 ```
 を実行して http://localhost:8080/hello をブラウザで開く。
+
+## dakoku 構成
+
+社内コンテスト時のパワポを参照 https://docs.google.com/presentation/d/1fSNwpfxhM9J2wm1i37oWLk-OgVsAeZcwm-t-KSjLurg/edit#slide=id.p
